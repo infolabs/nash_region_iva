@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  nlproject:
+    restart: always
+    build: ./nlproject/
+    volumes:
+      - ${DIRECTORY}/nlproject/application:/application
+    ports:
+      - 8000:8000
+    command: 
+      - /bin/bash
+      - '-c'
+      - python init.py && python manage.py runserver 0.0.0.0:8000

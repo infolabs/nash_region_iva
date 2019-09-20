@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title>Определить категорию сообщения. Народная экспертиза</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+  </head>
+  <body>
+    <div class="fullwidth site-navigation">
+        <div class="container">
+            <div class="page-header">
+                <h1>ИВА &mdash; интеллектуальный<br>виртуальный ассистент</h1>
+            </div>
+        </div>
+   </div>
+
+    <div class="container message-content">
+      <div class="item">
+        <div class="row">
+          <div class="col-md-3">
+            <img class="img-responsive" src="{% static 'img/iva.png' %}">
+          </div>
+          <div class="col-md-9">
+
+            <div class="form-block">
+              <form method='post' >
+                {% csrf_token %}
+                <div class="form-group">
+                  <h4 for="id_text">Опишите проблему, и ассистент определит её тематику:</h4>
+                  <textarea class="form-control" id="id_text" name="text" placeholder="Ваше сообщение"></textarea>
+                  <span class="errors help-block"></span>
+                </div>
+                <div class="form-group">
+                  <a href="#" class="btn btn-info">Определить тематику</a>
+                </div>
+              </form><hr>
+              <div class="form-group">
+                <h4>Возможные варианты:</h4>
+                <ul id="#suggestions" style="list-style: none"></ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <img class="img-responsive center-block" src="{% static 'img/ne-expert-logo.png' %}" alt="Народная экспертиза" width="30%" height="30%">
+      <br>
+    </div>
+
+
+
+    <script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
+
+    <script>
+      $("#id_text").change(function () {
+        var text = $(this).val();
+
+        $.ajax({
+          url: '/ajax/classify',
+          data: {'text': text},
+          dataType: 'json',
+          success: function (data) {
+            $("ul").empty();
+            for (suggestion of data.suggestions) {
+              $("ul").append("<li><a href='https://narod-expert.ru/particular-problem/create/" + suggestion['id'] + "/'>" + suggestion['name'] + "</a></li>");
+            }
+          }
+        });
+
+      });
+    </script>
+  </body>
+</html>
