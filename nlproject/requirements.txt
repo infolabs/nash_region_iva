@@ -1,4 +1,4 @@
-django==2.0.5
+django==2.2.24
 
 nltk==3.3.0
 numpy==1.14.3
